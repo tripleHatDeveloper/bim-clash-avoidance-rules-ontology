@@ -8,7 +8,7 @@
 
   <owl:Ontology rdf:about="https://github.com/tripleHatDeveloper/bim-clash-avoidance-rules-ontology/">
     <rdfs:label xml:lang="en">BIM Coordination Rules and Ontology for Clash Avoidance</rdfs:label>
-    <rdfs:comment xml:lang="en">Repository-ready OWL ontology for BIM-based multidisciplinary coordination and clash avoidance. This version represents a prototype ontology, integrating only the four coordination rules implemented in the prototype system. It includes the core ontology structure, while excluding interface features such as tutorial accessibility, which are not modelled as rules.</rdfs:comment>
+    <rdfs:comment xml:lang="en">Repository-ready OWL ontology for BIM-based multidisciplinary coordination and clash avoidance. This OWL ontology represents a reduced prototype extract of the full BIM coordination ontology developed in the associated research. It includes only the subset of classes, properties, and coordination rules required for prototype system implementation and reproducibility. The complete ontology contains additional concepts and rules that are not included in this repository version.</rdfs:comment>
   </owl:Ontology>
 
   <!-- Core BIM model classes -->
