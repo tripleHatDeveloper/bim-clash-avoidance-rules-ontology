@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Validated Rule Library</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --panel-2: #eef3ff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --border: #d7deea;
+      --accent: #0f62fe;
+      --accent-soft: #dbe8ff;
+      --success: #1f7a3d;
+      --warning: #b45309;
+      --neutral: #6b7280;
+      --shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+      --radius: 16px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #f8fbff 0%, var(--bg) 100%);
+      color: var(--text);
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 28px;
+    }
+    .hero {
+      background: linear-gradient(135deg, #0f62fe 0%, #3c8cff 100%);
+      color: white;
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+    .hero h1 {
+      margin: 0 0 8px;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+    .hero p {
+      margin: 6px 0;
+      color: rgba(255,255,255,0.92);
+      max-width: 950px;
+      line-height: 1.55;
+    }
+    .insights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin: 0 0 24px;
+    }
+    .insight-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .insight-card h3 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+    }
+    .insight-card p {
+      margin: 0;
+      color: var(--text);
+      line-height: 1.6;
+      font-size: 0.95rem;
+    }
+    .top-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    .metric-value {
+      font-size: 2rem;
+      font-weight: 700;
+      margin: 8px 0 4px;
+    }
+    .metric-label {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .layout {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+    .filters h2, .content h2 {
+      margin-top: 0;
+      font-size: 1.1rem;
+    }
+    .filter-group {
+      margin-bottom: 18px;
+    }
+    .filter-group label {
+      display: block;
+      font-size: 0.92rem;
+      margin-bottom: 8px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+    input[type="text"], select {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: white;
+      font: inherit;
+      color: var(--text);
+    }
+    .checkbox-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fbfcff;
+    }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      background: var(--accent-soft);
+      color: var(--accent);
+      border: 1px solid #bfd4ff;
+    }
+    .pill.enforceable {
+      background: #eaf7ee;
+      color: var(--success);
+      border-color: #bee1c8;
+    }
+    .pill.warning {
+      background: #fff4e6;
+      color: var(--warning);
+      border-color: #f1d2a6;
+    }
+    .pill.process {
+      background: #f2f4f7;
+      color: #4b5563;
+      border-color: #d8dde6;
+    }
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+    .results-meta {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    .rules-grid {
+      display: grid;
+      gap: 16px;
+    }
+    .rule-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+    .rule-card h3 {
+      margin: 10px 0 12px;
+      font-size: 1.05rem;
+      line-height: 1.5;
+    }
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .meta strong {
+      font-weight: 600;
+    }
+    .section-title {
+      margin: 14px 0 6px;
+      font-size: 0.9rem;
+      color: var(--muted);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .rule-body {
+      line-height: 1.6;
+      font-size: 0.96rem;
+    }
+    .legend {
+      display: grid;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .legend-item {
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: #fcfdff;
+    }
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.92rem;
+    }
+    .mini-table th, .mini-table td {
+      padding: 10px 8px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+    .mini-table th {
+      color: var(--muted);
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .empty-state {
+      text-align: center;
+      color: var(--muted);
+      padding: 40px 20px;
+      background: white;
+      border: 1px dashed var(--border);
+      border-radius: 18px;
+    }
+    .footer-note {
+      margin-top: 24px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    button {
+      border: 1px solid var(--border);
+      background: white;
+      color: var(--text);
+      font: inherit;
+      padding: 10px 12px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    button:hover {
+      border-color: #9fb7e7;
+      background: #f8fbff;
+    }
+    @media (max-width: 1100px) {
+      .insights-grid { grid-template-columns: 1fr; }
+      .top-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .layout { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 700px) {
+      .container { padding: 16px; }
+      .top-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 1.55rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <section class="hero">
+      <h1>Rule Intelligence Dashboard</h1>
+      <p>An interactive view of validated rules, their automation readiness, and their distribution across disciplines. Explore the library through filters, search, and summary insights derived directly from the underlying dataset.</p>
+    </section>
+
+    <section class="top-grid" id="summaryCards"></section>
+    <section class="insights-grid" id="insightsGrid"></section>
+
+    <div class="layout">
+      <aside class="filters card">
+        <h2>Filter and Explore</h2>
+
+        <div class="filter-group">
+          <label for="searchInput">Search by keyword</label>
+          <input id="searchInput" type="text" placeholder="Search rule text, rationale, or presentation format" />
+        </div>
+
+        <div class="filter-group">
+          <label for="disciplineSelect">Discipline</label>
+          <select id="disciplineSelect">
+            <option value="All">All disciplines</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label>Automation classification</label>
+          <div class="checkbox-list" id="classificationFilters"></div>
+        </div>
+
+        <div class="filter-group">
+          <button id="resetBtn" type="button">Reset filters</button>
+        </div>
+
+        <div class="filter-group">
+          <h2>Legend</h2>
+          <div class="legend" id="legendBox"></div>
+        </div>
+
+        <div class="filter-group">
+          <h2>Discipline breakdown</h2>
+          <table class="mini-table" id="disciplineTable">
+            <thead>
+              <tr>
+                <th>Discipline</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </aside>
+
+      <main class="content">
+        <div class="toolbar">
+          <div>
+            <h2 style="margin-bottom:6px;">Rule library</h2>
+            <div class="results-meta" id="resultsMeta"></div>
+          </div>
+          <div class="pill">Interactive rule insights</div>
+        </div>
+        <div class="rules-grid" id="rulesGrid"></div>
+      </main>
+    </div>
+
+    <div class="footer-note">
+      The dashboard is fully data-driven and focuses on rule patterns, automation potential, and discipline-level distribution. Use the filters to isolate areas with the highest concentration of enforceable checks, workflow reminders, or process-dependent rules.
+    </div>
+  </div>
+
+  <script>
+    const DATA = {"summary": {"Total validated rules": 35, "OWL/API Enforceable": 13, "API Warning / Workflow Monitoring": 6, "Process-Based / Not Directly Automatable": 16}, "legend": {"OWL/API Enforceable": "Rule can be represented semantically and checked against model state or parameters during authoring.", "API Warning / Workflow Monitoring": "Rule can be monitored through events, warnings, or workflow metadata, but is better handled as a prompt/reminder than OWL-based constraint", "Process-Based / Not Directly Automatable": "Rule depends on meetings, governance, document exchange, or external sources not directly available in the active BIM model."}, "rules": [{"Discipline": "Architectural", "Clash Avoidance Rule": "A project-specific priority order among the structural, MEP, and architectural disciplines shall be agreed at kickoff and recorded in the BIM management plan.", "Rule Presentation Format": "BIM Management Plan; Must be present in kickoff meeting agenda", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Requires project governance and meeting decisions rather than model-state validation.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Architectural", "Clash Avoidance Rule": "A discipline-specific Level of Detail (LOD) matrix shall be clearly defined before modelling begins.", "Rule Presentation Format": "BIM Management Plan", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Requires project planning and documentation, not authoring-time model checks.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Architectural", "Clash Avoidance Rule": "The site model shall remain pinned in place.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be checked from linked model state (e.g., pinned/unpinned) during authoring.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Architectural", "Clash Avoidance Rule": "Axes and levels shall be pinned immediately after creation.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be checked when grids/levels are created or modified by inspecting pinned status.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Architectural", "Clash Avoidance Rule": "MEP consultants shall define the required clearance between the ceiling and slab.", "Rule Presentation Format": "BIM Management Plan; BIM Coordination Meetings", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Requires consultant input and agreement before model-based checking is possible.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Architectural", "Clash Avoidance Rule": "MEP consultants shall define the ceiling thickness required to accommodate maintenance access.", "Rule Presentation Format": "BIM Management Plan; BIM Coordination Meetings", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Depends on external requirements that must first be agreed and documented.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Architectural", "Clash Avoidance Rule": "MEP-provided clearance and ceiling-thickness requirements shall be accessible to all model authors during modelling.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Concerns information availability and team communication rather than model-state validation.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Architectural", "Clash Avoidance Rule": "The modeled clearance between the ceiling and slab shall match the MEP-specified requirement.", "Rule Presentation Format": "Error prompt if the dimension is less than recommended", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be checked if the required dimension is stored in parameters or configuration data.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Architectural", "Clash Avoidance Rule": "The modeled ceiling thickness shall match the MEP-specified requirement.", "Rule Presentation Format": "Error prompt if the dimension is less than recommended", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be checked from ceiling type/instance data against a required value.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Architectural", "Clash Avoidance Rule": "Interior walls shall not extend above the ceiling-defined limit.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Error prompt if the dimension is less than recommended", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be evaluated from wall height, ceiling elevation, and required clearance parameters.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Architectural", "Clash Avoidance Rule": "Wall types used for coordinated modelling shall include defined material layers and layer thicknesses.", "Rule Presentation Format": "Reminder; Error prompt if basic wall is detected", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be checked from wall type composition and missing/undefined layer information.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Architectural", "Clash Avoidance Rule": "In workshared models, synchronization with the central model shall occur at least once per hour.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "API Warning / Workflow Monitoring", "Automation Rationale": "Can be monitored from worksharing events and timestamps, but is best handled as a reminder rather than a hard constraint.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Architectural", "Clash Avoidance Rule": "Revit warnings, especially duplicate-element warnings, shall be reviewed and resolved during each modelling session.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "API Warning / Workflow Monitoring", "Automation Rationale": "Warnings can be surfaced via the API, but 'resolve quickly' remains a workflow expectation.", "Source Sheet": "ARCH_RULES"}, {"Discipline": "Structural", "Clash Avoidance Rule": "The site model shall remain pinned in place.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be checked from linked model state (e.g., pinned/unpinned) during authoring.", "Source Sheet": "STRUC_RULES"}, {"Discipline": "Structural", "Clash Avoidance Rule": "Axes and levels shall be pinned immediately after creation.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be checked when grids/levels are created or modified by inspecting pinned status.", "Source Sheet": "STRUC_RULES"}, {"Discipline": "Structural", "Clash Avoidance Rule": "Structural modelling shall begin only after receipt of the first LOD 200 architectural model.", "Rule Presentation Format": "BIM Management Plan; BIM Coordination Meetings", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Requires project sequencing and document/state approval outside the active model.", "Source Sheet": "STRUC_RULES"}, {"Discipline": "Structural", "Clash Avoidance Rule": "After receipt of the LOD 200 architectural model, the structural discipline shall consult the MEP discipline before finalizing coordinated elements.", "Rule Presentation Format": "BIM Management Plan; BIM Coordination Meetings", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Represents a coordination workflow decision rather than a model-state rule.", "Source Sheet": "STRUC_RULES"}, {"Discipline": "Structural", "Clash Avoidance Rule": "Structural and MEP consultants shall define the required spaces for mechanical elements within shear walls and beams.", "Rule Presentation Format": "BIM Management Plan; BIM Coordination Meetings", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Needs interdisciplinary agreement before it can be converted into checkable geometric rules.", "Source Sheet": "STRUC_RULES"}, {"Discipline": "Structural", "Clash Avoidance Rule": "Required duct and shaft opening dimensions shall be provided by the MEP consultant.", "Rule Presentation Format": "BIM Management Plan; BIM Coordination Meetings", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Depends on external requirements being supplied before model checks can be performed.", "Source Sheet": "STRUC_RULES"}, {"Discipline": "Structural", "Clash Avoidance Rule": "Modeled duct and shaft openings shall match the MEP-specified dimensions.", "Rule Presentation Format": "Error prompt if the dimension is less than recommended", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be checked from opening geometry/parameters against required dimensions.", "Source Sheet": "STRUC_RULES"}, {"Discipline": "Structural", "Clash Avoidance Rule": "In workshared models, synchronization with the central model shall occur at least once per hour.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "API Warning / Workflow Monitoring", "Automation Rationale": "Can be monitored from worksharing events and timestamps, but is best handled as a reminder rather than a hard constraint.", "Source Sheet": "STRUC_RULES"}, {"Discipline": "Structural", "Clash Avoidance Rule": "Revit warnings, especially duplicate-element warnings, shall be reviewed and resolved during each modelling session.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "API Warning / Workflow Monitoring", "Automation Rationale": "Warnings can be surfaced via the API, but 'resolve quickly' remains a workflow expectation.", "Source Sheet": "STRUC_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "The work hierarchy for the MEP BIM model shall be agreed at kickoff and documented for the project.", "Rule Presentation Format": "BIM Management Plan; BIM Coordination Meetings", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Requires team agreement and project governance, not authoring-time validation.", "Source Sheet": "MEP_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "The site model shall remain pinned in place.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be checked from linked model state (e.g., pinned/unpinned) during authoring.", "Source Sheet": "MEP_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "Axes and levels shall be pinned immediately after creation.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be checked when grids/levels are created or modified by inspecting pinned status.", "Source Sheet": "MEP_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "Insulation thickness for pipes and ducts shall be explicitly defined and modeled where required.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be checked by detecting missing insulation or missing insulation-thickness values on insulated services.", "Source Sheet": "MEP_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "Modeled insulation thickness shall match the specified requirement.", "Rule Presentation Format": "Error prompt if the dimension is less than recommended", "Automation Classification": "OWL/API Enforceable", "Automation Rationale": "Can be checked from pipe/duct insulation parameters against the required value.", "Source Sheet": "MEP_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "HVAC systems, sloped services, and fire protection systems should be modeled in a coordinated manner.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Too broad and process-oriented for a direct authoring-time rule without additional formalization.", "Source Sheet": "MEP_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "Maintenance clearance requirements shall be communicated to all relevant team members.", "Rule Presentation Format": "BIM Management Plan; BIM Coordination Meetings; Tutorial Module of Clash Avoidance Assistant", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Concerns communication and dissemination of requirements rather than direct model-state checking.", "Source Sheet": "MEP_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "The first MEP model iteration shall be shared with the architectural and structural disciplines.", "Rule Presentation Format": "BIM Management Plan; BIM Coordination Meetings", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Requires coordination workflow and document-sharing actions outside the active model.", "Source Sheet": "MEP_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "The MEP discipline shall obtain the latest ceiling plans from the architectural discipline through the agreed publication workflow.", "Rule Presentation Format": "BIM Management Plan; BIM Coordination Meetings", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Depends on external document exchange and version control, not direct model validation.", "Source Sheet": "MEP_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "The MEP discipline shall verify that modeled ceiling fixtures match the latest approved fixture positions.", "Rule Presentation Format": "BIM Management Plan; BIM Coordination Meetings", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Requires comparison against externally approved layouts unless additional linked data integration is implemented.", "Source Sheet": "MEP_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "In workshared models, synchronization with the central model shall occur at least once per hour.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "API Warning / Workflow Monitoring", "Automation Rationale": "Can be monitored from worksharing events and timestamps, but is best handled as a reminder rather than a hard constraint.", "Source Sheet": "MEP_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "Revit warnings, especially duplicate-element warnings, shall be reviewed and resolved during each modelling session.", "Rule Presentation Format": "Tutorial Module of Clash Avoidance Assistant; Reminder", "Automation Classification": "API Warning / Workflow Monitoring", "Automation Rationale": "Warnings can be surfaced via the API, but 'resolve quickly' remains a workflow expectation.", "Source Sheet": "MEP_RULES"}, {"Discipline": "MEP", "Clash Avoidance Rule": "The MEP model shall be checked to confirm that all required electrical and fire protection components shown in the 2D design documents are present in the BIM model.", "Rule Presentation Format": "BIM Management Plan; BIM Coordination Meetings; Tutorial Module of Clash Avoidance Assistant", "Automation Classification": "Process-Based / Not Directly Automatable", "Automation Rationale": "Requires external document-to-model comparison unless a separate structured source is integrated.", "Source Sheet": "MEP_RULES"}], "disciplineCounts": {"Architectural": 13, "Structural": 9, "MEP": 13}, "classificationCounts": {"Process-Based / Not Directly Automatable": 16, "OWL/API Enforceable": 13, "API Warning / Workflow Monitoring": 6}, "byDisciplineClassification": {"Architectural": {"Process-Based / Not Directly Automatable": 5, "OWL/API Enforceable": 6, "API Warning / Workflow Monitoring": 2}, "Structural": {"OWL/API Enforceable": 3, "Process-Based / Not Directly Automatable": 4, "API Warning / Workflow Monitoring": 2}, "MEP": {"Process-Based / Not Directly Automatable": 7, "OWL/API Enforceable": 4, "API Warning / Workflow Monitoring": 2}}};
+
+    const state = {
+      search: "",
+      discipline: "All",
+      classifications: new Set(Object.keys(DATA.classificationCounts))
+    };
+
+    const summaryCards = document.getElementById("summaryCards");
+    const classificationFilters = document.getElementById("classificationFilters");
+    const insightsGrid = document.getElementById("insightsGrid");
+    const disciplineSelect = document.getElementById("disciplineSelect");
+    const legendBox = document.getElementById("legendBox");
+    const rulesGrid = document.getElementById("rulesGrid");
+    const resultsMeta = document.getElementById("resultsMeta");
+    const searchInput = document.getElementById("searchInput");
+    const resetBtn = document.getElementById("resetBtn");
+    const disciplineTableBody = document.querySelector("#disciplineTable tbody");
+
+    function classificationClass(name) {
+      if (name.includes("OWL/API Enforceable")) return "enforceable";
+      if (name.includes("API Warning")) return "warning";
+      return "process";
+    }
+
+    function renderSummaryCards() {
+      const cards = [
+        { label: "Total validated rules", value: DATA.summary["Total validated rules"] },
+        { label: "OWL/API Enforceable", value: DATA.summary["OWL/API Enforceable"] },
+        { label: "API Warning / Workflow Monitoring", value: DATA.summary["API Warning / Workflow Monitoring"] },
+        { label: "Process-Based / Not Directly Automatable", value: DATA.summary["Process-Based / Not Directly Automatable"] }
+      ];
+      summaryCards.innerHTML = cards.map(card => `
+        <div class="card">
+          <div class="metric-label">${card.label}</div>
+          <div class="metric-value">${card.value}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderInsights() {
+      const total = DATA.rules.length;
+      const topClassification = Object.entries(DATA.classificationCounts).sort((a, b) => b[1] - a[1])[0];
+      const topDiscipline = Object.entries(DATA.disciplineCounts).sort((a, b) => b[1] - a[1])[0];
+      const enforceableShare = Math.round((DATA.classificationCounts["OWL/API Enforceable"] / total) * 100);
+      const processShare = Math.round((DATA.classificationCounts["Process-Based / Not Directly Automatable"] / total) * 100);
+      const workflowShare = Math.round((DATA.classificationCounts["API Warning / Workflow Monitoring"] / total) * 100);
+
+      const disciplineFocus = Object.entries(DATA.byDisciplineClassification)
+        .map(([discipline, counts]) => {
+          const leader = Object.entries(counts).sort((a, b) => b[1] - a[1])[0];
+          return `<strong>${discipline}</strong>: ${leader[0]} (${leader[1]})`;
+        })
+        .join("<br>");
+
+      insightsGrid.innerHTML = `
+        <div class="insight-card">
+          <h3>Primary pattern</h3>
+          <p>The largest rule group is <strong>${topClassification[0]}</strong> with <strong>${topClassification[1]}</strong> rules, indicating that governance and coordination actions form the biggest share of the library.</p>
+        </div>
+        <div class="insight-card">
+          <h3>Automation readiness</h3>
+          <p><strong>${enforceableShare}%</strong> of rules are directly enforceable, <strong>${workflowShare}%</strong> are suitable for warning-based monitoring, and <strong>${processShare}%</strong> remain process-dependent.</p>
+        </div>
+        <div class="insight-card">
+          <h3>Discipline concentration</h3>
+          <p><strong>${topDiscipline[0]}</strong> and MEP each contain the highest number of rules at <strong>${topDiscipline[1]}</strong>. <br><br>${disciplineFocus}</p>
+        </div>
+      `;
+    }
+
+    function renderLegend() {
+      legendBox.innerHTML = Object.entries(DATA.legend).map(([key, value]) => `
+        <div class="legend-item">
+          <div class="pill ${classificationClass(key)}">${key}</div>
+          <div style="margin-top:10px; line-height:1.55; font-size:0.93rem;">${value}</div>
+        </div>
+      `).join("");
+    }
+
+    function renderDisciplineOptions() {
+      const disciplines = [...new Set(DATA.rules.map(r => r["Discipline"]))];
+      disciplines.forEach(d => {
+        const option = document.createElement("option");
+        option.value = d;
+        option.textContent = d;
+        disciplineSelect.appendChild(option);
+      });
+    }
+
+    function renderClassificationFilters() {
+      classificationFilters.innerHTML = Object.entries(DATA.classificationCounts).map(([name, count], index) => `
+        <label class="checkbox-item">
+          <input type="checkbox" value="${name}" checked />
+          <span style="flex:1;">${name}</span>
+          <span class="pill ${classificationClass(name)}">${count}</span>
+        </label>
+      `).join("");
+
+      classificationFilters.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.addEventListener("change", () => {
+          const checked = [...classificationFilters.querySelectorAll('input[type="checkbox"]:checked')].map(x => x.value);
+          state.classifications = new Set(checked);
+          renderRules();
+        });
+      });
+    }
+
+    function renderDisciplineTable() {
+      disciplineTableBody.innerHTML = Object.entries(DATA.disciplineCounts).map(([discipline, count]) => `
+        <tr>
+          <td>${discipline}</td>
+          <td>${count}</td>
+        </tr>
+      `).join("");
+    }
+
+    function getFilteredRules() {
+      const term = state.search.trim().toLowerCase();
+      return DATA.rules.filter(rule => {
+        const matchesDiscipline = state.discipline === "All" || rule["Discipline"] === state.discipline;
+        const matchesClassification = state.classifications.has(rule["Automation Classification"]);
+        const haystack = [
+          rule["Clash Avoidance Rule"],
+          rule["Rule Presentation Format"],
+          rule["Automation Classification"],
+          rule["Automation Rationale"],
+          rule["Discipline"]
+        ].join(" ").toLowerCase();
+        const matchesSearch = !term || haystack.includes(term);
+        return matchesDiscipline && matchesClassification && matchesSearch;
+      });
+    }
+
+    function renderRules() {
+      const filtered = getFilteredRules();
+
+      resultsMeta.textContent = `${filtered.length} of ${DATA.rules.length} rules shown`;
+
+      if (!filtered.length) {
+        rulesGrid.innerHTML = `<div class="empty-state">No rules match the current filters. Try widening the search or selecting more classifications.</div>`;
+        return;
+      }
+
+      rulesGrid.innerHTML = filtered.map(rule => `
+        <article class="rule-card">
+          <div class="meta">
+            <span class="pill">${rule["Discipline"]}</span>
+            <span class="pill ${classificationClass(rule["Automation Classification"])}">${rule["Automation Classification"]}</span>
+          </div>
+          <h3>${rule["Clash Avoidance Rule"]}</h3>
+          <div class="section-title">Rule presentation format</div>
+          <div class="rule-body">${rule["Rule Presentation Format"]}</div>
+          <div class="section-title">Automation rationale</div>
+          <div class="rule-body">${rule["Automation Rationale"]}</div>
+        </article>
+      `).join("");
+    }
+
+    searchInput.addEventListener("input", e => {
+      state.search = e.target.value;
+      renderRules();
+    });
+
+    disciplineSelect.addEventListener("change", e => {
+      state.discipline = e.target.value;
+      renderRules();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      state.search = "";
+      state.discipline = "All";
+      state.classifications = new Set(Object.keys(DATA.classificationCounts));
+      searchInput.value = "";
+      disciplineSelect.value = "All";
+      classificationFilters.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = true);
+      renderRules();
+    });
+
+    renderSummaryCards();
+    renderInsights();
+    renderLegend();
+    renderDisciplineOptions();
+    renderClassificationFilters();
+    renderDisciplineTable();
+    renderRules();
+  </script>
+</body>
+</html>

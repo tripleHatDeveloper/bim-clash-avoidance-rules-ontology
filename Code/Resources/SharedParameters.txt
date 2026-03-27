@@ -1,0 +1,70 @@
+# Clash Avoidance Plugin — Shared Parameters File
+# =====================================================================
+# HOW TO USE:
+#   1. In Revit: Manage → Shared Parameters → Browse to this file
+#   2. Manage → Project Parameters → Add
+#   3. Select the parameter group "Clash Avoidance" and the parameter
+#      you want to bind, then assign it to the relevant category.
+#
+# PARAMETER BINDING RECOMMENDATIONS:
+#
+#   CA_CeilingHeightThreshold  → Bind to: Walls (instance)
+#                                OR Project Information (project-wide default)
+#                                Value: ceiling height in mm, e.g. 2700
+#                                This sets the maximum ceiling line height.
+#
+#   CA_MEPClearance            → Bind to: Walls (instance)
+#                                OR Project Information (project-wide default)
+#                                Value: MEP zone clearance in mm, e.g. 300
+#                                Rule A02 checks: WallHeight ≤ Ceiling − MEP
+#
+#   CA_DimensionalThreshold    → Bind to: any element category where a
+#                                dimensional limit has been agreed in the BIM
+#                                Execution Plan (e.g. structural framing,
+#                                mechanical equipment).
+#                                Value: maximum allowed dimension in mm.
+#
+# NOTE: All values are entered in MILLIMETRES in the Revit UI.
+#       The plugin converts mm → decimal feet internally.
+# =====================================================================
+*META-BEGIN
+PARAMVERSION	1
+META-END
+
+*GROUP-BEGIN
+ID	1
+NAME	Clash Avoidance
+GROUP-END
+
+*PARAM-BEGIN
+GUID	3f7a1c2b-8e4d-4a09-b6f1-2c5d8e3a7b90
+NAME	CA_CeilingHeightThreshold
+DATATYPE	LENGTH
+DATACATEGORY	
+GROUP	1
+VISIBLE	1
+DESCRIPTION	Ceiling height threshold for interior wall height rule (Rule A02). Enter value in mm. Wall height must not exceed (this value minus CA_MEPClearance).
+USERMODIFIABLE	1
+PARAM-END
+
+*PARAM-BEGIN
+GUID	5c9e2d4a-1b7f-4c08-a3e2-9d6b5c1f4e82
+NAME	CA_MEPClearance
+DATATYPE	LENGTH
+DATACATEGORY	
+GROUP	1
+VISIBLE	1
+DESCRIPTION	Minimum MEP clearance above the ceiling line in mm. Used by Rule A02: wall height must not exceed (CA_CeilingHeightThreshold minus this value).
+USERMODIFIABLE	1
+PARAM-END
+
+*PARAM-BEGIN
+GUID	8b4f3e6d-2a9c-4b17-c5f3-1e8d7a2b5c94
+NAME	CA_DimensionalThreshold
+DATATYPE	LENGTH
+DATACATEGORY	
+GROUP	1
+VISIBLE	1
+DESCRIPTION	Project-specific maximum dimensional threshold in mm. Assign to element types or instances where a BIM Execution Plan dimensional agreement applies.
+USERMODIFIABLE	1
+PARAM-END

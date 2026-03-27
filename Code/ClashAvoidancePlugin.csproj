@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A1B2C3D4-E5F6-7890-ABCD-EF1234567890}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ClashAvoidancePlugin</RootNamespace>
+    <AssemblyName>ClashAvoidancePlugin</AssemblyName>
+    <!-- Must target .NET Framework 4.8 for Revit 2024 compatibility -->
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <UseWPF>true</UseWPF>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <!-- 
+      UPDATE: Set this to the folder where you want the DLL copied after build.
+      Must match the <Assembly> path in ClashAvoidance.addin.
+    -->
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <!-- ================================================================= -->
+  <!--  Revit 2024 API References                                         -->
+  <!--  UPDATE PATHS if Revit is not installed at the default location.   -->
+  <!-- ================================================================= -->
+  <ItemGroup>
+    <Reference Include="RevitAPI">
+      <HintPath>C:\Program Files\Autodesk\Revit 2024\RevitAPI.dll</HintPath>
+      <!-- Do NOT copy to output — must use the version installed with Revit -->
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>C:\Program Files\Autodesk\Revit 2024\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+  <!-- .NET Framework references -->
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
+    <!-- WPF assemblies for ViolationPromptDialog -->
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="System.Xaml" />
+  </ItemGroup>
+  <!-- Source files -->
+  <ItemGroup>
+    <Compile Include="App.cs" />
+    <Compile Include="Commands\Commands.cs" />
+    <Compile Include="Engine\OntologyLoader.cs" />
+    <Compile Include="Engine\RuleEngine.cs" />
+    <Compile Include="Engine\EventHandler.cs" />
+    <Compile Include="Logging\OverrideLogger.cs" />
+    <!-- Assistant entry dialog (PluginLogic button opens this) -->
+    <Page Include="UI\AssistantDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="UI\AssistantDialog.xaml.cs">
+      <DependentUpon>AssistantDialog.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <!-- Linked model pin violation dialog -->
+    <Page Include="UI\LinkedModelPinnedDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="UI\LinkedModelPinnedDialog.xaml.cs">
+      <DependentUpon>LinkedModelPinnedDialog.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <!-- Wall height violation dialog -->
+    <Page Include="UI\WallHeightDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="UI\WallHeightDialog.xaml.cs">
+      <DependentUpon>WallHeightDialog.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <!-- Generic fallback violation dialog (dimensional threshold etc.) -->
+    <Page Include="UI\ViolationPromptDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Compile Include="UI\ViolationPromptDialog.xaml.cs">
+      <DependentUpon>ViolationPromptDialog.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <!-- Resource files copied to output -->
+  <ItemGroup>
+    <!-- OWL ontology — must be present at runtime -->
+    <Content Include="Resources\clash_avoidance_ontology.owl">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <!-- Tutorial HTML -->
+    <Content Include="Resources\tutorial_rules_library.html">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <!-- Shared parameters definition -->
+    <Content Include="Resources\SharedParameters.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <!-- .addin manifest (for reference; deploy separately) -->
+    <Content Include="ClashAvoidance.addin">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

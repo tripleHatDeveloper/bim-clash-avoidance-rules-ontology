@@ -1,0 +1,146 @@
+<Window x:Class="ClashAvoidancePlugin.UI.AssistantDialog"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="ClashAvoidanceTutorial - Clash Avoidance Assistant"
+        Width="500"
+        SizeToContent="Height"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F7FB"
+        FontFamily="Segoe UI">
+
+    <Window.Resources>
+
+        <!-- Action link button style — flat, arrow-prefixed, left-aligned -->
+        <Style x:Key="ActionLinkStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="#1F2937"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Padding" Value="16,14"/>
+            <Setter Property="BorderBrush" Value="#D7DEEA"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="10"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#EEF3FF"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="#0F62FE"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#DBE8FF"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <StackPanel Margin="28,24,28,28">
+
+        <!-- ── Header bar ─────────────────────────────────────────────── -->
+        <Border Background="Linear"
+                CornerRadius="12" Margin="0,0,0,20">
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#0F62FE" Offset="0"/>
+                    <GradientStop Color="#3C8CFF" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+            <StackPanel Margin="20,16">
+                <TextBlock Text="Clash Avoidance Assistant"
+                           FontSize="16" FontWeight="Bold"
+                           Foreground="White"/>
+                <TextBlock Text="Authoring-time coordination rule checker"
+                           FontSize="11" Foreground="#CCE0FF"
+                           Margin="0,3,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- ── Instruction text ───────────────────────────────────────── -->
+        <TextBlock TextWrapping="Wrap"
+                   FontSize="13"
+                   Foreground="#374151"
+                   LineHeight="20"
+                   Margin="0,0,0,22">
+            Please select the appropriate course of action. By clicking the options
+            below you will be directed to the corresponding task.
+        </TextBlock>
+
+        <!-- ── Divider ────────────────────────────────────────────────── -->
+        <Separator Background="#E5E7EB" Margin="0,0,0,18"/>
+
+        <!-- ── Action buttons ─────────────────────────────────────────── -->
+
+        <!-- Button 1: View Clash Avoidance Tutorial -->
+        <Button x:Name="TutorialBtn"
+                Style="{StaticResource ActionLinkStyle}"
+                Margin="0,0,0,10"
+                Click="TutorialBtn_Click">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="→" FontSize="15" Foreground="#0F62FE"
+                           VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <StackPanel>
+                    <TextBlock Text="View Clash Avoidance Tutorial"
+                               FontSize="13" FontWeight="SemiBold"
+                               Foreground="#1F2937"/>
+                    <TextBlock Text="Open the validated rule library with 35 expert-derived coordination rules"
+                               FontSize="11" Foreground="#6B7280"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Button>
+
+        <!-- Button 2: Launch Clash Avoidance Check -->
+        <Button x:Name="LaunchCheckBtn"
+                Style="{StaticResource ActionLinkStyle}"
+                Margin="0,0,0,0"
+                Click="LaunchCheckBtn_Click">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="→" FontSize="15" Foreground="#0F62FE"
+                           VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <StackPanel>
+                    <TextBlock x:Name="LaunchBtnLabel"
+                               Text="Launch Clash Avoidance Check"
+                               FontSize="13" FontWeight="SemiBold"
+                               Foreground="#1F2937"/>
+                    <TextBlock x:Name="LaunchBtnSubtitle"
+                               Text="Activate real-time rule checking running in the background during modelling"
+                               FontSize="11" Foreground="#6B7280"
+                               Margin="0,2,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Button>
+
+        <!-- ── Status indicator (hidden until check is active) ────────── -->
+        <Border x:Name="ActiveStatusBanner"
+                Visibility="Collapsed"
+                Background="#EAFAF1" BorderBrush="#86EFAC"
+                BorderThickness="1" CornerRadius="8"
+                Padding="14,10" Margin="0,16,0,0">
+            <StackPanel Orientation="Horizontal">
+                <Ellipse Width="10" Height="10" Fill="#22C55E"
+                         VerticalAlignment="Center" Margin="0,0,10,0"/>
+                <TextBlock Text="Clash Avoidance Check is running in the background."
+                           FontSize="12" Foreground="#166534"
+                           VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
+
+    </StackPanel>
+</Window>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Clash Avoidance Plugin — Revit 2024 Add-In Manifest
+  
+  DEPLOYMENT:
+  Copy this file to:
+    %AppData%\Autodesk\Revit\Addins\2024\ClashAvoidance.addin
+  
+  Copy the compiled DLL and all Resources to a permanent folder, then update
+  the <Assembly> path below to match that folder.
+  
+  For development, point <Assembly> at your Visual Studio Debug output folder.
+-->
+<RevitAddIns>
+  <AddIn Type="Application">
+
+    <!-- Display name shown in Revit's Add-Ins manager -->
+    <Name>Clash Avoidance — BIM Coordination Rule Checker</Name>
+
+    <!-- Full namespace.classname of the IExternalApplication class -->
+    <FullClassName>ClashAvoidancePlugin.App</FullClassName>
+
+    <!-- 
+      UPDATE THIS PATH to the actual location of your compiled DLL.
+      Example: C:\RevitPlugins\ClashAvoidance\ClashAvoidancePlugin.dll
+    -->
+    <Assembly>C:\RevitPlugins\ClashAvoidance\ClashAvoidancePlugin.dll</Assembly>
+
+    <!-- Unique GUID — do not reuse across different plugins -->
+    <AddInId>7A3F2E91-BC14-4D08-A6F5-8C3D0E1B9F47</AddInId>
+
+    <!-- Vendor information -->
+    <VendorId>NorthumbriaUniversity</VendorId>
+    <VendorDescription>
+      Northumbria University, Newcastle, UK — School of Architecture and Built Environment.
+      BIM Coordination Clash Avoidance Plugin.
+      Contact: omar.doukari@northumbria.ac.uk
+    </VendorDescription>
+
+  </AddIn>
+</RevitAddIns>
